@@ -2,6 +2,19 @@
 
 Single-page portfolio built with Next.js (App Router), React 19, TypeScript, Tailwind CSS v4, Motion, and Lucide icons.
 
+## Repository
+
+The code lives on GitLab: https://gitlab.com/personal-project4924743/monineath-v3-portfolio
+
+```bash
+git clone git@gitlab.com:personal-project4924743/monineath-v3-portfolio.git
+cd monineath-v3-portfolio
+npm install
+```
+
+- `main` is the default branch; day-to-day work happens on `develop`.
+- The previous GitHub repository (`github.com/salmonineath/monineath-v3-portfolio`) is kept as a backup under the `github` remote. Push to it with `git push github <branch>` only if you want to keep it in sync.
+
 ## Commands
 
 | Task | Command |
