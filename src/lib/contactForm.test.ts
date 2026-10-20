@@ -12,9 +12,17 @@ describe('validateContactForm', () => {
     expect(validateContactForm(validValues)).toEqual({})
   })
 
-  it('requires name, email, and a meaningful message', () => {
-    const errors = validateContactForm({ name: ' ', email: '', message: 'hi' })
-    expect(Object.keys(errors).sort()).toEqual(['email', 'message', 'name'])
+  it('requires name, email, and message', () => {
+    const errors = validateContactForm({ name: ' ', email: '', message: '  ' })
+    expect(errors).toEqual({
+      name: 'Full name is required.',
+      email: 'Email address is required.',
+      message: 'Message is required.',
+    })
+  })
+
+  it('accepts a short message', () => {
+    expect(validateContactForm({ ...validValues, message: 'hi' })).toEqual({})
   })
 
   it('rejects malformed email addresses', () => {

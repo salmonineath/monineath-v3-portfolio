@@ -156,14 +156,13 @@
 }
 
 /*
- * Motion. One orchestrated hero sequence (copy rises in, then the code card
- * types itself) plus motion that answers the visitor. Everything is gated on
+ * Motion. One orchestrated hero sequence (copy rises in, then the portrait)
+ * plus motion that answers the visitor. Everything is gated on
  * `prefers-reduced-motion: no-preference`.
  */
 @theme {
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
   --animate-rise: rise 0.8s var(--ease-out-expo) both;
-  --animate-caret: caret 1.06s steps(1) infinite;
   --animate-beacon: beacon 2.4s var(--ease-out-expo) infinite;
   --animate-drift: drift 14s ease-in-out infinite alternate;
 
@@ -172,12 +171,6 @@
       opacity: 0;
       transform: translateY(14px);
       filter: blur(6px);
-    }
-  }
-
-  @keyframes caret {
-    50% {
-      opacity: 0;
     }
   }
 

@@ -19,6 +19,8 @@ type SiteConfig = {
   email: string
   github: ExternalProfile & { repositoriesHref: string }
   /** Links to this profile are hidden while it is `null`. */
+  gitlab: ExternalProfile | null
+  /** Links to this profile are hidden while it is `null`. */
   linkedin: ExternalProfile | null
   /**
    * Hero portrait, served from `public/`. A labeled placeholder is shown
@@ -45,9 +47,14 @@ export const site: SiteConfig = {
     href: 'https://github.com/salmonineath',
     repositoriesHref: 'https://github.com/salmonineath?tab=repositories',
   },
-  // TODO: add your LinkedIn profile, e.g.
-  // { label: 'linkedin.com/in/your-handle', href: 'https://www.linkedin.com/in/your-handle' }
-  linkedin: null,
+  gitlab: {
+    label: 'gitlab.com/salmonineath31',
+    href: 'https://gitlab.com/salmonineath31',
+  },
+  linkedin: {
+    label: 'linkedin.com/in/monineath-sol',
+    href: 'https://www.linkedin.com/in/monineath-sol-6987b2397/',
+  },
   profilePhoto: {
     src: '/images/profile.jpg',
     alt: 'Portrait of Monineath',

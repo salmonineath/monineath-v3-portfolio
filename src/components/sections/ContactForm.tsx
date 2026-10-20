@@ -78,7 +78,7 @@ export function ContactForm() {
   return (
     <form noValidate onSubmit={handleSubmit} className="rounded-card border border-line bg-surface-solid/60 p-5 sm:p-8">
       <div className="grid gap-5 sm:grid-cols-2">
-        <FormField label="Your Name" autoComplete="name" placeholder="e.g. Jordan Lee" {...fieldProps('name')} />
+        <FormField label="Full Name" autoComplete="name" placeholder="e.g. Jordan Lee" {...fieldProps('name')} />
         <FormField
           label="Email Address"
           type="email"
@@ -89,7 +89,7 @@ export function ContactForm() {
       </div>
 
       <FormField
-        label="Project Details"
+        label="Message"
         multiline
         placeholder="What would you like to build? Share goals, timeline, or anything helpful..."
         className="mt-5"
@@ -174,6 +174,10 @@ function FormField({ label, name, error, type = 'text', multiline = false, class
     <div className={className}>
       <label htmlFor={name} className="font-mono text-xs font-medium text-fg-secondary">
         {label}
+        {/* Visual cue only; screen readers announce the `required` attribute. */}
+        <span className="ml-0.5 text-rose-600 dark:text-rose-400" aria-hidden="true">
+          *
+        </span>
       </label>
       {multiline ? <textarea rows={5} {...controlProps} /> : <input type={type} {...controlProps} />}
       {error && (

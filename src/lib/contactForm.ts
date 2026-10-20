@@ -18,19 +18,19 @@ export function validateContactForm(values: ContactFormValues): ContactFormError
   const message = values.message.trim()
 
   if (!name) {
-    errors.name = 'Please enter your name.'
+    errors.name = 'Full name is required.'
   } else if (name.length > CONTACT_LIMITS.name) {
     errors.name = `Please keep your name under ${CONTACT_LIMITS.name} characters.`
   }
 
   if (!email) {
-    errors.email = 'Please enter your email address.'
+    errors.email = 'Email address is required.'
   } else if (email.length > CONTACT_LIMITS.email || !EMAIL_PATTERN.test(email)) {
     errors.email = 'Please enter a valid email address, e.g. name@company.com.'
   }
 
-  if (message.length < 10) {
-    errors.message = 'Please tell me a little about your project (at least 10 characters).'
+  if (!message) {
+    errors.message = 'Message is required.'
   } else if (message.length > CONTACT_LIMITS.message) {
     errors.message = `Please keep your message under ${CONTACT_LIMITS.message} characters.`
   }

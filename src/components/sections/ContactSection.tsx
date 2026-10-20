@@ -32,6 +32,15 @@ function getContactChannels(): ContactChannel[] {
       external: true,
     },
   ]
+  if (site.gitlab) {
+    channels.push({
+      label: 'GitLab',
+      value: site.gitlab.label,
+      href: site.gitlab.href,
+      icon: <BrandIcon name="gitlab" />,
+      external: true,
+    })
+  }
   if (site.linkedin) {
     channels.push({
       label: 'LinkedIn',

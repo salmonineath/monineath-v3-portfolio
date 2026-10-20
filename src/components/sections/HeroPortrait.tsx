@@ -3,6 +3,8 @@ import path from 'node:path'
 import { UserRound } from 'lucide-react'
 import Image from 'next/image'
 import { site } from '@/data/site'
+import { cn } from '@/lib/cn'
+import { BrandIcon, type BrandIconName } from '../ui/BrandIcon'
 import { FloatingFrame } from './FloatingFrame'
 
 /** Checked at build time, so dropping the file into `public/` is all it takes. */
@@ -10,29 +12,73 @@ function hasProfilePhoto(): boolean {
   return existsSync(path.join(process.cwd(), 'public', site.profilePhoto.src))
 }
 
-/** Hero photo in a 4:5 frame with a blue-purple border and glow. */
+/** Small stack logos orbiting the portrait. Purely decorative. */
+const floatingLogos: { icon: BrandIconName; className: string; delay: number }[] = [
+  { icon: 'react', className: '-left-4 top-[14%] sm:-left-7', delay: 0 },
+  { icon: 'vue', className: '-right-4 top-[42%] sm:-right-7', delay: 1.2 },
+  { icon: 'typescript', className: '-left-3 bottom-[12%] sm:-left-6', delay: 2.4 },
+]
+
+/** Hero photo: gradient ring, soft glow, and an offset outline for depth. */
 export function HeroPortrait() {
   const { src, alt } = site.profilePhoto
 
   return (
-    <FloatingFrame>
-      <div className="rounded-panel bg-linear-to-br from-blue-500/70 via-indigo-500/50 to-purple-500/70 p-px shadow-glow">
-        <div className="relative aspect-[4/5] overflow-hidden rounded-[calc(var(--radius-panel)-1px)] bg-surface-solid">
-          {hasProfilePhoto() ? (
-            <Image
-              src={src}
-              alt={alt}
-              fill
-              preload
-              sizes="(min-width: 1024px) 272px, (min-width: 640px) 272px, 62vw"
-              className="object-cover object-top"
-            />
-          ) : (
-            <PortraitPlaceholder path={`public${src}`} />
-          )}
+    <div className="relative">
+      {/* Glow behind the photo. */}
+      <div
+        aria-hidden="true"
+        className="absolute -inset-6 rounded-full bg-radial from-blue-500/30 via-indigo-500/15 to-transparent blur-2xl"
+      />
+      {/* Offset outline frame. */}
+      <div
+        aria-hidden="true"
+        className="absolute inset-0 translate-x-3 translate-y-3 rounded-[2rem] border border-indigo-400/30 sm:translate-x-4 sm:translate-y-4"
+      />
+
+      <FloatingFrame distance={6}>
+        <div className="relative rounded-[2rem] bg-linear-to-br from-blue-500 via-indigo-500 to-purple-500 p-[3px] shadow-2xl shadow-blue-900/40">
+          <div className="relative aspect-[4/5] overflow-hidden rounded-[calc(2rem-3px)] bg-surface-solid">
+            {hasProfilePhoto() ? (
+              <>
+                <Image
+                  src={src}
+                  alt={alt}
+                  fill
+                  preload
+                  sizes="(min-width: 640px) 368px, 80vw"
+                  className="object-cover object-top"
+                />
+                {/* Blends the bottom of the photo into the page. */}
+                <div
+                  aria-hidden="true"
+                  className="absolute inset-x-0 bottom-0 h-1/4 bg-linear-to-t from-slate-950/50 to-transparent"
+                />
+              </>
+            ) : (
+              <PortraitPlaceholder path={`public${src}`} />
+            )}
+          </div>
         </div>
-      </div>
-    </FloatingFrame>
+      </FloatingFrame>
+
+      {floatingLogos.map((logo) => (
+        <FloatingFrame
+          key={logo.icon}
+          distance={10}
+          duration={5}
+          delay={logo.delay}
+          className={cn('absolute z-10', logo.className)}
+        >
+          <span
+            aria-hidden="true"
+            className="grid size-11 place-items-center rounded-xl border border-line bg-surface-solid/90 shadow-lg shadow-black/30 backdrop-blur-md sm:size-12"
+          >
+            <BrandIcon name={logo.icon} colored className="size-5 sm:size-6" />
+          </span>
+        </FloatingFrame>
+      ))}
+    </div>
   )
 }
 

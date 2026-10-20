@@ -4,7 +4,6 @@ import { BrandIcon } from '../ui/BrandIcon'
 import { ButtonLink } from '../ui/ButtonLink'
 import { Container } from '../ui/Container'
 import { StatusPill } from '../ui/StatusPill'
-import { HeroCodeCard } from './HeroCodeCard'
 import { HeroPortrait } from './HeroPortrait'
 import { HeroSpotlight } from './HeroSpotlight'
 
@@ -66,6 +65,11 @@ export function HeroSection() {
               <li>
                 <SocialIconLink href={site.github.href} label="GitHub profile" icon="github" />
               </li>
+              {site.gitlab && (
+                <li>
+                  <SocialIconLink href={site.gitlab.href} label="GitLab profile" icon="gitlab" />
+                </li>
+              )}
               {site.linkedin && (
                 <li>
                   <SocialIconLink href={site.linkedin.href} label="LinkedIn profile" icon="linkedin" />
@@ -75,14 +79,8 @@ export function HeroSection() {
           </div>
         </div>
 
-        {/* Portrait in front, the decorative editor window offset behind it. */}
-        <div className="relative mx-auto h-[25rem] w-full max-w-[22rem] min-[400px]:h-[28rem] sm:max-w-[27.5rem] lg:h-[31rem]">
-          <div className="absolute top-0 left-0 w-[92%] motion-safe:animate-rise motion-safe:[animation-delay:400ms]">
-            <HeroCodeCard />
-          </div>
-          <div className="absolute right-0 bottom-0 z-10 w-[62%] motion-safe:animate-rise motion-safe:[animation-delay:250ms]">
-            <HeroPortrait />
-          </div>
+        <div className="mx-auto w-full max-w-[19rem] min-[400px]:max-w-[21rem] sm:max-w-[23rem] lg:mr-0 motion-safe:animate-rise motion-safe:[animation-delay:250ms]">
+          <HeroPortrait />
         </div>
       </Container>
     </HeroSpotlight>
@@ -92,7 +90,7 @@ export function HeroSection() {
 type SocialIconLinkProps = {
   href: string
   label: string
-  icon: 'github' | 'linkedin'
+  icon: 'github' | 'gitlab' | 'linkedin'
 }
 
 function SocialIconLink({ href, label, icon }: SocialIconLinkProps) {
