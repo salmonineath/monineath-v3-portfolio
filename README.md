@@ -1,75 +1,39 @@
-# React + TypeScript + Vite
+# monineath.dev — Personal Portfolio
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Single-page portfolio built with Next.js (App Router), React 19, TypeScript, Tailwind CSS v4, Motion, and Lucide icons.
 
-Currently, two official plugins are available:
+## Commands
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+| Task | Command |
+|---|---|
+| Install | `npm install` |
+| Dev server | `npm run dev` |
+| Production build | `npm run build` then `npm start` |
+| Lint | `npm run lint` |
+| Type check | `npm run typecheck` |
+| Unit tests | `npm test` |
 
-## React Compiler
+## Before launch: content to supply
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+| What | Where |
+|---|---|
+| Real projects + screenshots (16:10, e.g. 1600×1000) | `src/data/projects.ts`, images in `public/images/projects/` |
+| Site URL | `NEXT_PUBLIC_SITE_URL` env var (see `.env.example`) |
 
-## Expanding the ESLint configuration
+## Where things live
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- `src/app/` — layout (fonts, metadata, theme script), the page, Open Graph image, robots, sitemap, and the contact server action.
+- `src/styles/globals.css` — the design system: theme colors (dark + light), fonts, layout tokens, animations. Components use semantic tokens (`bg-page`, `text-fg-muted`, `border-line`, …), never raw hex values.
+- `src/data/` — all editable content: `site.ts` (name, email, GitHub/GitLab/LinkedIn links, photo path), `stack.ts`, `services.ts`, `projects.ts`.
+- `src/components/ui/` — shared primitives (buttons, cards, tags, headings, brand icons).
+- `src/components/layout/` — header, footer, theme toggle.
+- `src/components/sections/` — one file per page section, in page order in `src/app/page.tsx`.
+- `src/components/projects/` — project card and screenshot frame.
+- `src/lib/` — helpers (class names, tones, contact form validation).
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+## Notes
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-
-```
-
-You can also install [eslint-plugin-react-x](https://npmx.dev/package/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://npmx.dev/package/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-
-```
+- **Contact form:** validated in the browser and again in the server action `src/app/actions/sendInquiry.ts`. Set `CONTACT_WEBHOOK_URL` (server-only) to an endpoint that accepts JSON `{ name, email, message }` (e.g. a Formspree form endpoint) to deliver messages. Without it, the form opens the visitor's email app with the message drafted. The form only says "sent" when the endpoint confirms delivery.
+- **Theme:** dark by default; the toggle stores the choice in `localStorage` and an inline script applies it before first paint.
+- **Motion:** hero entrance and scroll reveals are CSS (they run before hydration); Motion handles the nav highlight, mobile menu, stack filter, and portrait drift. All motion respects `prefers-reduced-motion`.
+- **Brand icons:** paths from [Simple Icons](https://simpleicons.org) (CC0), inlined in `src/components/ui/BrandIcon.tsx`.
