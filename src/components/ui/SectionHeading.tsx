@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react'
-import { cn } from '../../lib/cn'
-import { stagger } from '../../lib/stagger'
+import { cn } from '@/lib/cn'
+import { stagger } from '@/lib/stagger'
 
 type SectionEyebrowProps = {
   /** Two-digit section number, e.g. "01". */

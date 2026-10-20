@@ -6,12 +6,25 @@ type ExternalProfile = {
 
 type SiteConfig = {
   name: string
-  domain: string
+  title: string
+  /** Brand text beside the monogram in the header. */
+  brand: string
   initials: string
+  description: string
+  /**
+   * Public URL of the deployed site, used for canonical and Open Graph URLs.
+   * Set `NEXT_PUBLIC_SITE_URL` in the hosting environment.
+   */
+  url: string
   email: string
   github: ExternalProfile & { repositoriesHref: string }
   /** Links to this profile are hidden while it is `null`. */
   linkedin: ExternalProfile | null
+  /**
+   * Hero portrait, served from `public/`. A labeled placeholder is shown
+   * until the file exists.
+   */
+  profilePhoto: { src: string; alt: string }
 }
 
 /**
@@ -20,8 +33,12 @@ type SiteConfig = {
  */
 export const site: SiteConfig = {
   name: 'Monineath',
-  domain: 'monineath.dev',
+  title: 'Full-Stack Developer',
+  brand: 'monineath.dev',
   initials: 'MN',
+  description:
+    'I build modern, reliable, and user-friendly web applications, from frontend interfaces to backend systems.',
+  url: process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000',
   email: 'salmonineath31@gmail.com',
   github: {
     label: 'github.com/salmonineath',
@@ -31,6 +48,10 @@ export const site: SiteConfig = {
   // TODO: add your LinkedIn profile, e.g.
   // { label: 'linkedin.com/in/your-handle', href: 'https://www.linkedin.com/in/your-handle' }
   linkedin: null,
+  profilePhoto: {
+    src: '/images/profile.jpg',
+    alt: 'Portrait of Monineath',
+  },
 }
 
 export type SectionId = 'home' | 'about' | 'stack' | 'services' | 'projects' | 'contact'

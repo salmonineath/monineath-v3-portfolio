@@ -1,6 +1,6 @@
 import type { AnchorHTMLAttributes } from 'react'
 import { buttonStyles, type ButtonSize, type ButtonVariant } from './buttonStyles'
-import type { Tone } from '../../lib/tones'
+import type { Tone } from '@/lib/tones'
 
 type ButtonLinkProps = AnchorHTMLAttributes<HTMLAnchorElement> & {
   href: string

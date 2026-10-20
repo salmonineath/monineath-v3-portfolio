@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react'
-import { cn } from '../../lib/cn'
-import { toneClasses, type Tone } from '../../lib/tones'
+import { cn } from '@/lib/cn'
+import { toneClasses, type Tone } from '@/lib/tones'
 
 type TagProps = {
   children: ReactNode

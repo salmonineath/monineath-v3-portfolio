@@ -1,6 +1,9 @@
+'use client'
+
+import { Check } from 'lucide-react'
+import { useReducedMotion } from 'motion/react'
 import { useEffect, useState } from 'react'
-import { cn } from '../../lib/cn'
-import { Icon } from '../ui/Icon'
+import { cn } from '@/lib/cn'
 
 type TokenKind = 'keyword' | 'name' | 'string' | 'comment' | 'punctuation'
 
@@ -20,21 +23,23 @@ const property = (name: string, value: string): Segment[] => [
   ['punctuation', ',\n'],
 ]
 
+const list = (name: string, values: string[]): Segment[] => [
+  ['punctuation', `  ${name}: [`],
+  ['string', values.map((value) => `'${value}'`).join(', ')],
+  ['punctuation', '],\n'],
+]
+
 const code: Segment[] = [
-  ['comment', '// Client-focused full-stack engineering profile\n'],
+  ['comment', '// Building for the web, end to end\n'],
   ['keyword', 'export const '],
-  ['name', 'freelanceService'],
+  ['name', 'developer'],
   ['punctuation', ' = {\n'],
-  ...property('engineer', 'Monineath'),
-  ...property('focus', 'Custom Websites & SaaS Platforms'),
-  ...property('turnaround', 'Fast, Agile & Milestone-Driven'),
-  ['punctuation', '  deliverables: [\n'],
-  ['string', "    'Pixel-Perfect Responsive UI',\n"],
-  ['string', "    'High-Performance REST & Cloud APIs',\n"],
-  ['string', "    'Turnkey Deployments & SEO'\n"],
-  ['punctuation', '  ],\n  clientGuarantee: '],
-  ['name', "'100% Quality & Clean Code'"],
-  ['punctuation', '\n};'],
+  ...property('name', 'Monineath'),
+  ...property('role', 'Full-Stack Developer'),
+  ...list('frontend', ['Vue', 'React', 'Next.js']),
+  ...list('backend', ['NestJS', 'Express']),
+  ...property('openTo', 'Freelance'),
+  ['punctuation', '};'],
 ]
 
 /** Character offset where each segment starts. */
@@ -42,16 +47,15 @@ const segmentStarts = code.map((_, index) => code.slice(0, index).reduce((sum, [
 const totalChars = segmentStarts.at(-1)! + code.at(-1)![1].length
 
 /** Waits for the hero copy to land, then types roughly 2 characters per frame. */
-const TYPING_DELAY_MS = 700
+const TYPING_DELAY_MS = 900
 const CHARS_PER_MS = 0.12
 
 function useTypedLength(total: number): number {
-  const [typed, setTyped] = useState(() =>
-    window.matchMedia('(prefers-reduced-motion: reduce)').matches ? total : 0,
-  )
+  const reduceMotion = useReducedMotion()
+  const [typed, setTyped] = useState(0)
 
   useEffect(() => {
-    if (typed >= total) return
+    if (reduceMotion) return
 
     let frame = 0
     let start: number | undefined
@@ -69,11 +73,9 @@ function useTypedLength(total: number): number {
       window.clearTimeout(timeout)
       cancelAnimationFrame(frame)
     }
-    // Runs once on mount; `typed` only seeds the reduced-motion shortcut.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [total])
+  }, [total, reduceMotion])
 
-  return typed
+  return reduceMotion ? total : typed
 }
 
 /**
@@ -106,54 +108,40 @@ function TypedCode({ typed }: { typed: number }) {
 
 function Caret() {
   return (
-    <span
-      aria-hidden="true"
-      className="-mb-0.5 inline-block h-[1.1em] w-[2px] translate-y-[0.1em] bg-blue-400 motion-safe:animate-caret"
-    />
+    <span className="-mb-0.5 inline-block h-[1.1em] w-[2px] translate-y-[0.1em] bg-blue-400 motion-safe:animate-caret" />
   )
 }
 
-/** Decorative "editor window" beside the hero copy. */
+/** Decorative "editor window" behind the hero portrait. Hidden from assistive tech. */
 export function HeroCodeCard() {
   const typed = useTypedLength(totalChars)
   const done = typed >= totalChars
 
   return (
-    <figure className="relative min-w-0 overflow-hidden rounded-card border border-blue-400/25 bg-code text-code-fg shadow-glow motion-safe:animate-rise motion-safe:[animation-delay:400ms]">
-      <figcaption className="flex items-center gap-3 border-b border-white/5 bg-white/2 px-4 py-3">
-        <span className="flex gap-2" aria-hidden="true">
-          <span className="size-3 rounded-full bg-rose-500/80" />
-          <span className="size-3 rounded-full bg-amber-500/80" />
-          <span className="size-3 rounded-full bg-emerald-500/80" />
+    <div
+      aria-hidden="true"
+      className="relative min-w-0 overflow-hidden rounded-card border border-blue-400/25 bg-code text-code-fg shadow-glow"
+    >
+      <div className="flex items-center gap-3 border-b border-white/5 bg-white/2 px-4 py-3">
+        <span className="flex gap-2">
+          <span className="size-2.5 rounded-full bg-rose-500/80 sm:size-3" />
+          <span className="size-2.5 rounded-full bg-amber-500/80 sm:size-3" />
+          <span className="size-2.5 rounded-full bg-emerald-500/80 sm:size-3" />
         </span>
-        <span className="flex min-w-0 items-center gap-2 font-mono text-xs text-slate-400">
-          <span
-            className={cn('size-1.5 shrink-0 rounded-full transition-colors', done ? 'bg-slate-500' : 'bg-blue-400')}
-            aria-hidden="true"
-          />
-          <span className="truncate">monineath.client-config.ts</span>
+        <span className="flex min-w-0 items-center gap-2 font-mono text-[0.65rem] text-slate-400 sm:text-xs">
+          <span className={cn('size-1.5 shrink-0 rounded-full transition-colors', done ? 'bg-slate-500' : 'bg-blue-400')} />
+          <span className="truncate">developer.config.ts</span>
         </span>
-        <span className="ml-auto hidden shrink-0 rounded border border-emerald-500/20 bg-emerald-500/10 px-1.5 py-0.5 font-mono text-[0.65rem] text-emerald-400 sm:inline">
-          Freelance Ready
-        </span>
-      </figcaption>
+      </div>
 
-      <pre className="overflow-x-auto px-5 pt-5 pb-4 font-mono text-[0.75rem] leading-[1.7] sm:text-[0.8rem]">
+      <pre className="overflow-hidden px-4 pt-4 pb-3 font-mono text-[0.62rem] leading-[1.75] min-[400px]:text-[0.7rem] sm:px-5 sm:text-[0.78rem]">
         <TypedCode typed={typed} />
       </pre>
 
-      <div className="mx-5 flex flex-wrap items-center justify-between gap-2 border-t border-white/5 py-3 font-mono text-[0.7rem]">
-        <span
-          className={cn(
-            'flex items-center gap-1.5 text-emerald-400 transition-all duration-500 ease-out-expo',
-            done ? 'translate-y-0 opacity-100' : 'translate-y-1 opacity-0',
-          )}
-        >
-          <Icon name="check" className="size-3" />
-          TypeScript Strict • Zero Technical Debt
-        </span>
-        <span className="text-slate-500">{done ? 'Fast Delivery' : 'Compiling…'}</span>
+      <div className="mx-4 flex items-center gap-1.5 border-t border-white/5 py-3 font-mono text-[0.65rem] text-emerald-400 sm:mx-5 sm:text-[0.7rem]">
+        <Check className={cn('size-3 transition-opacity duration-500', done ? 'opacity-100' : 'opacity-0')} />
+        {done ? 'Ready to build' : 'Compiling…'}
       </div>
-    </figure>
+    </div>
   )
 }

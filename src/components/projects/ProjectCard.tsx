@@ -1,20 +1,21 @@
-import type { Project } from '../../data/projects'
-import { cn } from '../../lib/cn'
-import { toneClasses } from '../../lib/tones'
+import { ArrowRight, Check, type LucideIcon } from 'lucide-react'
+import type { Project } from '@/data/projects'
+import { cn } from '@/lib/cn'
+import { stagger } from '@/lib/stagger'
+import { toneClasses } from '@/lib/tones'
+import { BrandIcon } from '../ui/BrandIcon'
 import { buttonStyles } from '../ui/buttonStyles'
 import { Card } from '../ui/Card'
-import { Icon } from '../ui/Icon'
 import { Tag } from '../ui/Tag'
-import { ProjectPreview } from './ProjectPreview'
-import { stagger } from '../../lib/stagger'
+import { ProjectScreenshot } from './ProjectScreenshot'
 
 type ProjectCardProps = {
   project: Project
-  /** Puts the preview on the right on large screens, alternating down the page. */
-  previewOnRight?: boolean
+  /** Puts the screenshot on the right on large screens, alternating down the page. */
+  screenshotOnRight?: boolean
 }
 
-export function ProjectCard({ project, previewOnRight = false }: ProjectCardProps) {
+export function ProjectCard({ project, screenshotOnRight = false }: ProjectCardProps) {
   const tone = toneClasses[project.tone]
   const titleId = `project-${project.id}-title`
 
@@ -23,22 +24,26 @@ export function ProjectCard({ project, previewOnRight = false }: ProjectCardProp
       as="article"
       aria-labelledby={titleId}
       className={cn(
-        'grid overflow-hidden',
-        previewOnRight ? 'lg:grid-cols-[1fr_1.4fr]' : 'lg:grid-cols-[1.4fr_1fr]',
+        'group/project grid overflow-hidden transition-[border-color,box-shadow] duration-300 hover:border-fg-subtle/40 hover:shadow-2xl hover:shadow-blue-950/20',
+        screenshotOnRight ? 'lg:grid-cols-[1fr_1.4fr]' : 'lg:grid-cols-[1.4fr_1fr]',
       )}
     >
       <div
-        data-reveal={previewOnRight ? 'right' : 'left'}
+        data-reveal={screenshotOnRight ? 'right' : 'left'}
         style={stagger(2)}
-        className={cn('min-w-0 border-line-subtle', previewOnRight ? 'lg:order-last lg:border-l' : 'lg:border-r')}
+        className={cn('min-w-0 border-line-subtle', screenshotOnRight ? 'lg:order-last lg:border-l' : 'lg:border-r')}
       >
-        <ProjectPreview preview={project.preview} tone={project.tone} />
+        <ProjectScreenshot project={project} />
       </div>
 
       <div className="flex min-w-0 flex-col p-6 sm:p-8">
         <div className="flex flex-wrap items-center justify-between gap-3">
           <p className={cn('font-mono text-xs font-medium tracking-[0.12em] uppercase', tone.text)}>{project.category}</p>
-          <p className={cn('rounded px-2 py-0.5 font-mono text-xs', tone.soft, tone.text)}>{project.status}</p>
+          {project.placeholder && (
+            <p className="rounded border border-amber-500/30 bg-amber-500/10 px-2 py-0.5 font-mono text-xs text-amber-700 dark:text-amber-400">
+              Placeholder
+            </p>
+          )}
         </div>
 
         <h3 id={titleId} className="mt-4 text-2xl leading-snug font-semibold tracking-tight">
@@ -46,19 +51,22 @@ export function ProjectCard({ project, previewOnRight = false }: ProjectCardProp
         </h3>
         <p className="mt-4 text-sm leading-relaxed text-fg-secondary">{project.description}</p>
 
-        <h4 className="mt-6 font-mono text-xs font-medium tracking-[0.12em] text-fg-muted uppercase">
-          Engineering highlights:
-        </h4>
+        <h4 className="mt-6 font-mono text-xs font-medium tracking-[0.12em] text-fg-muted uppercase">Key features</h4>
         <ul className="mt-3 space-y-2">
-          {project.highlights.map((highlight, index) => (
-            <li key={highlight} data-reveal="" style={stagger(index + 3)} className="flex gap-2.5 text-xs leading-relaxed text-fg-secondary">
-              <Icon name="check" className={cn('mt-0.5 size-3.5 shrink-0', tone.text)} />
-              {highlight}
+          {project.features.map((feature, index) => (
+            <li
+              key={feature}
+              data-reveal=""
+              style={stagger(index + 3)}
+              className="flex gap-2.5 text-sm leading-relaxed text-fg-secondary"
+            >
+              <Check className={cn('mt-1 size-3.5 shrink-0', tone.text)} aria-hidden="true" />
+              {feature}
             </li>
           ))}
         </ul>
 
-        <ul className="mt-6 mb-6 flex flex-wrap gap-2" aria-label="Technologies">
+        <ul className="mt-6 mb-6 flex flex-wrap gap-2" aria-label="Technologies used">
           {project.technologies.map((technology) => (
             <li key={technology}>
               <Tag tone={project.tone}>{technology}</Tag>
@@ -66,54 +74,75 @@ export function ProjectCard({ project, previewOnRight = false }: ProjectCardProp
           ))}
         </ul>
 
-        <div className="flex flex-wrap gap-3 border-t border-line-subtle pt-6 lg:mt-auto">
-          <ProjectLinkButton
-            label={project.demo.label}
-            href={project.demo.href}
-            className={buttonStyles({ size: 'sm', tone: project.tone })}
-            icon="arrow-right"
-            iconPosition="end"
-          />
-          <ProjectLinkButton
-            label={project.repository.label}
-            href={project.repository.href}
-            className={buttonStyles({ size: 'sm', variant: 'secondary' })}
-            icon="github"
-            iconPosition="start"
-          />
-        </div>
+        <ProjectLinks project={project} />
       </div>
     </Card>
+  )
+}
+
+/**
+ * Real projects only show the links they have. Placeholders show both as
+ * disabled buttons so the finished layout is visible.
+ */
+function ProjectLinks({ project }: { project: Project }) {
+  const showDemo = project.demoUrl || project.placeholder
+  const showRepository = project.repositoryUrl || project.placeholder
+  if (!showDemo && !showRepository) return null
+
+  return (
+    <div className="flex flex-wrap gap-3 border-t border-line-subtle pt-6 lg:mt-auto">
+      {showDemo && (
+        <ProjectLinkButton
+          label="Live Demo"
+          href={project.demoUrl}
+          projectTitle={project.title}
+          className={buttonStyles({ size: 'sm', tone: project.tone })}
+          trailingIcon={ArrowRight}
+        />
+      )}
+      {showRepository && (
+        <ProjectLinkButton
+          label="Source Code"
+          href={project.repositoryUrl}
+          projectTitle={project.title}
+          className={buttonStyles({ size: 'sm', variant: 'secondary' })}
+          leadingGithubIcon
+        />
+      )}
+    </div>
   )
 }
 
 type ProjectLinkButtonProps = {
   label: string
   href: string | undefined
+  projectTitle: string
   className: string
-  icon: 'arrow-right' | 'github'
-  iconPosition: 'start' | 'end'
+  trailingIcon?: LucideIcon
+  leadingGithubIcon?: boolean
 }
 
-/** Renders a real link when a URL exists, otherwise an inert "coming soon" button. */
-function ProjectLinkButton({ label, href, className, icon, iconPosition }: ProjectLinkButtonProps) {
+function ProjectLinkButton({
+  label,
+  href,
+  projectTitle,
+  className,
+  trailingIcon: TrailingIcon,
+  leadingGithubIcon = false,
+}: ProjectLinkButtonProps) {
   const content = (
     <>
-      {iconPosition === 'start' && <Icon name={icon} />}
+      {leadingGithubIcon && <BrandIcon name="github" />}
       {label}
-      {iconPosition === 'end' && <Icon name={icon} />}
+      {TrailingIcon && <TrailingIcon className="size-4" aria-hidden="true" />}
     </>
   )
 
   if (!href) {
     return (
-      <span
-        className={cn(className, 'cursor-not-allowed opacity-50')}
-        aria-disabled="true"
-        title="Link coming soon"
-      >
+      <span className={cn(className, 'cursor-not-allowed opacity-50')} aria-disabled="true" title="Link not added yet">
         {content}
-        <span className="sr-only"> (link coming soon)</span>
+        <span className="sr-only"> (link not added yet)</span>
       </span>
     )
   }
@@ -121,6 +150,7 @@ function ProjectLinkButton({ label, href, className, icon, iconPosition }: Proje
   return (
     <a href={href} target="_blank" rel="noopener noreferrer" className={className}>
       {content}
+      <span className="sr-only"> for {projectTitle} (opens in a new tab)</span>
     </a>
   )
 }

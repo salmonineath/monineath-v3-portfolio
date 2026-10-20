@@ -1,12 +1,15 @@
+'use client'
+
+import { AnimatePresence, motion } from 'motion/react'
 import { useState } from 'react'
-import { stackCategories, stackFilters, type StackCategory, type StackFilterId, type StackItem } from '../../data/stack'
-import { cn } from '../../lib/cn'
-import { toneClasses } from '../../lib/tones'
+import { stackCategories, stackFilters, type StackCategory, type StackFilterId, type StackItem } from '@/data/stack'
+import { cn } from '@/lib/cn'
+import { stagger } from '@/lib/stagger'
+import { toneClasses } from '@/lib/tones'
+import { BrandIcon } from '../ui/BrandIcon'
 import { Card } from '../ui/Card'
 import { Container } from '../ui/Container'
-import { Icon } from '../ui/Icon'
 import { SectionHeading } from '../ui/SectionHeading'
-import { stagger } from '../../lib/stagger'
 
 export function StackSection() {
   const [activeFilter, setActiveFilter] = useState<StackFilterId>('all')
@@ -22,8 +25,8 @@ export function StackSection() {
             index="02"
             label="Stack"
             titleId="stack-title"
-            title="Technical Stack"
-            description="Technologies I actively use to construct production-ready web experiences."
+            title="Tech Stack"
+            description="The technologies I work with to design, build, and ship web applications."
           />
 
           <div
@@ -42,7 +45,7 @@ export function StackSection() {
                   aria-pressed={isActive}
                   onClick={() => setActiveFilter(filter.id)}
                   className={cn(
-                    'rounded-lg px-3 py-1.5 font-display text-sm font-medium whitespace-nowrap transition-colors lg:px-2.5 lg:text-[0.8rem]',
+                    'min-h-10 rounded-lg px-3 py-1.5 font-display text-sm font-medium whitespace-nowrap transition-colors lg:min-h-0 lg:px-2.5 lg:text-[0.8rem]',
                     isActive
                       ? 'bg-primary text-white'
                       : 'border border-line text-fg-muted hover:text-fg lg:border-transparent',
@@ -56,11 +59,22 @@ export function StackSection() {
         </div>
 
         <ul className="mt-8 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
-          {visibleCategories.map((category, index) => (
-            <li key={category.id} data-reveal="" style={stagger(index)}>
-              <StackCategoryCard category={category} />
-            </li>
-          ))}
+          <AnimatePresence initial={false} mode="popLayout">
+            {visibleCategories.map((category, index) => (
+              <motion.li
+                key={category.id}
+                layout
+                initial={{ opacity: 0, scale: 0.97 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.97 }}
+                transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+                data-reveal=""
+                style={stagger(index)}
+              >
+                <StackCategoryCard category={category} />
+              </motion.li>
+            ))}
+          </AnimatePresence>
         </ul>
       </Container>
     </section>
@@ -74,7 +88,9 @@ function StackCategoryCard({ category }: { category: StackCategory }) {
     <Card as="article" className="h-full p-5">
       <header className="flex items-center justify-between gap-3 border-b border-line-subtle pb-4">
         <h3 className={cn('font-mono text-sm font-medium tracking-[0.1em] uppercase', tone.text)}>{category.title}</h3>
-        <span className={cn('rounded-md px-2 py-0.5 font-mono text-[0.7rem]', tone.soft, tone.text)}>{category.badge}</span>
+        <span className={cn('shrink-0 rounded-md px-2 py-0.5 font-mono text-[0.7rem]', tone.soft, tone.text)}>
+          {category.badge}
+        </span>
       </header>
       <ul className="mt-4 space-y-3">
         {category.items.map((item, index) => (
@@ -88,15 +104,10 @@ function StackCategoryCard({ category }: { category: StackCategory }) {
 }
 
 function StackItemRow({ item }: { item: StackItem }) {
-  const tone = toneClasses[item.tone]
-
   return (
-    <div className="flex items-center gap-3 rounded-xl border border-line-subtle bg-surface-raised p-3">
-      <span
-        className={cn('grid size-8 shrink-0 place-items-center rounded-lg font-mono text-xs font-semibold', tone.soft, tone.text)}
-        aria-hidden="true"
-      >
-        {item.logo ? <Icon name={item.logo} className="size-4" /> : item.abbreviation}
+    <div className="group flex items-center gap-3 rounded-xl border border-line-subtle bg-surface-raised p-3 transition-colors duration-200 hover:border-line">
+      <span className="grid size-9 shrink-0 place-items-center rounded-lg border border-line-subtle bg-surface-solid text-fg transition-transform duration-200 ease-out-expo group-hover:scale-110 motion-reduce:transition-none">
+        <BrandIcon name={item.icon} colored className="size-[1.125rem]" />
       </span>
       <div className="min-w-0">
         <p className="font-display text-[0.95rem] font-medium text-fg">{item.name}</p>

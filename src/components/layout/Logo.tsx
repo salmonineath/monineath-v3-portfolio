@@ -1,5 +1,5 @@
-import { site } from '../../data/site'
-import { cn } from '../../lib/cn'
+import { site } from '@/data/site'
+import { cn } from '@/lib/cn'
 
 type LogoMarkProps = {
   className?: string

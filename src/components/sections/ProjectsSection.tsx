@@ -1,9 +1,9 @@
-import { projects } from '../../data/projects'
-import { site } from '../../data/site'
-import { stagger } from '../../lib/stagger'
+import { ExternalLink } from 'lucide-react'
+import { projects } from '@/data/projects'
+import { site } from '@/data/site'
+import { stagger } from '@/lib/stagger'
 import { ProjectCard } from '../projects/ProjectCard'
 import { Container } from '../ui/Container'
-import { Icon } from '../ui/Icon'
 import { SectionHeading } from '../ui/SectionHeading'
 
 export function ProjectsSection() {
@@ -16,7 +16,7 @@ export function ProjectsSection() {
             label="Portfolio"
             titleId="projects-title"
             title="Featured Projects"
-            description="Real applications engineered from schema design to polished user interface."
+            description="A selection of things I have built, from the database to the interface."
           />
           <a
             href={site.github.repositoriesHref}
@@ -24,17 +24,18 @@ export function ProjectsSection() {
             rel="noopener noreferrer"
             data-reveal=""
             style={stagger(3)}
-            className="flex items-center gap-2 self-start font-mono text-xs font-medium text-blue-600 hover:underline md:self-auto dark:text-blue-400"
+            className="flex min-h-10 items-center gap-2 self-start font-mono text-xs font-medium text-blue-600 hover:underline md:self-auto dark:text-blue-400"
           >
             Browse all repositories on GitHub
-            <Icon name="external-link" className="size-3.5" />
+            <span className="sr-only"> (opens in a new tab)</span>
+            <ExternalLink className="size-3.5" aria-hidden="true" />
           </a>
         </div>
 
         <ul className="mt-10 space-y-14">
           {projects.map((project, index) => (
             <li key={project.id} data-reveal="scale">
-              <ProjectCard project={project} previewOnRight={index % 2 === 1} />
+              <ProjectCard project={project} screenshotOnRight={index % 2 === 1} />
             </li>
           ))}
         </ul>

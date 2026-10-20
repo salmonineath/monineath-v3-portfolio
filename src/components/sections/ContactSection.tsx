@@ -1,29 +1,43 @@
-import { site } from '../../data/site'
+import { Mail } from 'lucide-react'
+import type { ReactNode } from 'react'
+import { site } from '@/data/site'
+import { stagger } from '@/lib/stagger'
+import { BrandIcon } from '../ui/BrandIcon'
 import { Container } from '../ui/Container'
-import { Icon, type IconName } from '../ui/Icon'
 import { SectionEyebrow } from '../ui/SectionHeading'
 import { ContactForm } from './ContactForm'
-import { stagger } from '../../lib/stagger'
 
 type ContactChannel = {
   label: string
   value: string
   href: string
-  icon: IconName
+  icon: ReactNode
   external: boolean
 }
 
 function getContactChannels(): ContactChannel[] {
   const channels: ContactChannel[] = [
-    { label: 'Email Directly', value: site.email, href: `mailto:${site.email}`, icon: 'mail', external: false },
-    { label: 'GitHub Profile', value: site.github.label, href: site.github.href, icon: 'github', external: true },
+    {
+      label: 'Email',
+      value: site.email,
+      href: `mailto:${site.email}`,
+      icon: <Mail className="size-4" aria-hidden="true" />,
+      external: false,
+    },
+    {
+      label: 'GitHub',
+      value: site.github.label,
+      href: site.github.href,
+      icon: <BrandIcon name="github" />,
+      external: true,
+    },
   ]
   if (site.linkedin) {
     channels.push({
-      label: 'LinkedIn Network',
+      label: 'LinkedIn',
       value: site.linkedin.label,
       href: site.linkedin.href,
-      icon: 'linkedin',
+      icon: <BrandIcon name="linkedin" />,
       external: true,
     })
   }
@@ -47,14 +61,14 @@ export function ContactSection() {
 
           <div className="relative">
             <p data-reveal="" style={stagger(2)} className="inline-block rounded-md border border-blue-500/20 bg-blue-500/10 px-3 py-1 font-mono text-xs text-blue-600 dark:text-blue-300">
-              Open to Freelance & Contract Work
+              Open to Freelance & Collaborations
             </p>
             <h2 id="contact-title" data-reveal="" style={stagger(3)} className="mt-4 text-4xl leading-[1.1] font-extrabold tracking-tight sm:text-[2.6rem]">
-              Have an idea? Let's build something together.
+              Have an idea? Let&apos;s build something together.
             </h2>
             <p data-reveal="" style={stagger(4)} className="mt-4 text-[0.95rem] leading-relaxed text-fg-secondary">
-              Whether you have an upcoming project, need to revamp an existing platform, or want to discuss technical
-              scope and pricing, I'm ready to collaborate.
+              Whether it&apos;s a new website, a custom web app, or improvements to something you already have, send me
+              a message and let&apos;s talk about it.
             </p>
 
             <ul className="mt-8 space-y-3">
@@ -63,10 +77,11 @@ export function ContactSection() {
                   <a
                     href={channel.href}
                     {...(channel.external && { target: '_blank', rel: 'noopener noreferrer' })}
+                    aria-label={`${channel.label}: ${channel.value}${channel.external ? ' (opens in a new tab)' : ''}`}
                     className="group flex items-center gap-3 rounded-xl border border-line-subtle bg-surface-raised p-3.5 transition-colors hover:border-line"
                   >
                     <span className="grid size-9 shrink-0 place-items-center rounded-lg bg-blue-500/10 text-blue-600 dark:text-blue-400">
-                      <Icon name={channel.icon} />
+                      {channel.icon}
                     </span>
                     <span className="min-w-0">
                       <span className="block font-mono text-[0.65rem] tracking-[0.1em] text-fg-muted uppercase">

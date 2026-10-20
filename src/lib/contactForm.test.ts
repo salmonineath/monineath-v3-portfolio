@@ -4,7 +4,6 @@ import { buildInquiryMailto, validateContactForm, type ContactFormValues } from 
 const validValues: ContactFormValues = {
   name: 'Jordan Lee',
   email: 'jordan@company.com',
-  projectType: 'SaaS App',
   message: 'I need a dashboard for my team.',
 }
 
@@ -14,7 +13,7 @@ describe('validateContactForm', () => {
   })
 
   it('requires name, email, and a meaningful message', () => {
-    const errors = validateContactForm({ name: ' ', email: '', projectType: '', message: 'hi' })
+    const errors = validateContactForm({ name: ' ', email: '', message: 'hi' })
     expect(Object.keys(errors).sort()).toEqual(['email', 'message', 'name'])
   })
 
@@ -22,8 +21,8 @@ describe('validateContactForm', () => {
     expect(validateContactForm({ ...validValues, email: 'not-an-email' }).email).toMatch(/valid email/)
   })
 
-  it('treats the project type as optional', () => {
-    expect(validateContactForm({ ...validValues, projectType: '' })).toEqual({})
+  it('rejects overly long messages', () => {
+    expect(validateContactForm({ ...validValues, message: 'x'.repeat(5001) }).message).toMatch(/under 5000/)
   })
 })
 
@@ -32,14 +31,8 @@ describe('buildInquiryMailto', () => {
     const url = new URL(buildInquiryMailto('me@example.com', validValues))
     expect(url.protocol).toBe('mailto:')
     expect(url.pathname).toBe('me@example.com')
-    expect(url.searchParams.get('subject')).toBe('Project inquiry: SaaS App')
+    expect(url.searchParams.get('subject')).toBe('Project inquiry from Jordan Lee')
     expect(url.searchParams.get('body')).toContain('Name: Jordan Lee')
     expect(url.searchParams.get('body')).toContain('Email: jordan@company.com')
-  })
-
-  it('omits the project type when it was left blank', () => {
-    const url = new URL(buildInquiryMailto('me@example.com', { ...validValues, projectType: '' }))
-    expect(url.searchParams.get('subject')).toBe('Project inquiry')
-    expect(url.searchParams.get('body')).not.toContain('Project type')
   })
 })

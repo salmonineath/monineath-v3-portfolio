@@ -2,7 +2,7 @@
 
 /*
  * Theme switching: `data-theme` on <html> is set before first paint by the
- * inline script in index.html and toggled by `useTheme`. The `dark:` variant
+ * inline script in app/layout.tsx and toggled by `ThemeToggle`. The `dark:` variant
  * targets that attribute instead of the OS preference.
  */
 @custom-variant dark (&:where([data-theme='dark'], [data-theme='dark'] *));
@@ -50,8 +50,9 @@
 }
 
 @theme inline {
-  --font-mono: 'Fira Code', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-  --font-display: 'Plus Jakarta Sans', ui-sans-serif, system-ui, sans-serif;
+  /* Loaded with next/font in app/layout.tsx. */
+  --font-mono: var(--font-fira-code), ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  --font-display: var(--font-plus-jakarta), ui-sans-serif, system-ui, sans-serif;
 
   --color-page: var(--page);
   --color-surface: var(--surface);
@@ -110,7 +111,7 @@
     min-width: 320px;
     background-color: var(--color-page);
     color: var(--color-fg-secondary);
-    font-family: var(--font-mono);
+    font-family: var(--font-display);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }

@@ -1,5 +1,5 @@
-import { cn } from '../../lib/cn'
-import { toneClasses, type Tone } from '../../lib/tones'
+import { cn } from '@/lib/cn'
+import { toneClasses, type Tone } from '@/lib/tones'
 
 export type ButtonVariant = 'primary' | 'secondary'
 export type ButtonSize = 'sm' | 'md'

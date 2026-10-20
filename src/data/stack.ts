@@ -1,5 +1,5 @@
-import type { IconName } from '../components/ui/Icon'
-import type { Tone } from '../lib/tones'
+import type { BrandIconName } from '@/components/ui/BrandIcon'
+import type { Tone } from '@/lib/tones'
 
 export type StackCategoryId = 'frontend' | 'backend' | 'languages' | 'databases' | 'tools'
 
@@ -7,12 +7,9 @@ export type StackFilterId = StackCategoryId | 'all'
 
 export type StackItem = {
   name: string
+  /** What the technology is, in a few plain words. Not a skill rating. */
   details: string
-  /** Short code shown in the item's tile, e.g. "TS". */
-  abbreviation: string
-  tone: Tone
-  /** Brand logo shown instead of the abbreviation, when available. */
-  logo?: IconName
+  icon: BrandIconName
 }
 
 export type StackCategory = {
@@ -28,7 +25,7 @@ export const stackFilters: { id: StackFilterId; label: string }[] = [
   { id: 'frontend', label: 'Frontend' },
   { id: 'backend', label: 'Backend' },
   { id: 'languages', label: 'Languages' },
-  { id: 'databases', label: 'Databases & Cloud' },
+  { id: 'databases', label: 'Databases & Services' },
   { id: 'tools', label: 'Design & Tools' },
 ]
 
@@ -36,12 +33,12 @@ export const stackCategories: StackCategory[] = [
   {
     id: 'frontend',
     title: 'Frontend',
-    badge: 'UI & State',
+    badge: 'User Interfaces',
     tone: 'blue',
     items: [
-      { name: 'Vue.js', details: 'Composition API, Pinia, Router', abbreviation: 'VUE', tone: 'emerald' },
-      { name: 'React', details: 'Hooks, Context, Modern Patterns', abbreviation: 'REA', tone: 'cyan' },
-      { name: 'Next.js', details: 'App Router, SSR, Server Actions', abbreviation: 'NXT', tone: 'slate' },
+      { name: 'Vue.js', details: 'Component-based interfaces', icon: 'vue' },
+      { name: 'React', details: 'Interactive UI library', icon: 'react' },
+      { name: 'Next.js', details: 'React framework for the web', icon: 'nextjs' },
     ],
   },
   {
@@ -50,9 +47,9 @@ export const stackCategories: StackCategory[] = [
     badge: 'Server & API',
     tone: 'indigo',
     items: [
-      { name: 'NestJS', details: 'Modular Architecture, DI, Guards', abbreviation: 'NST', tone: 'rose' },
-      { name: 'Express.js', details: 'RESTful APIs, Middlewares, Auth', abbreviation: 'EXP', tone: 'emerald' },
-      { name: 'Java', details: 'Spring Boot Foundations, OOP', abbreviation: 'JAV', tone: 'amber' },
+      { name: 'NestJS', details: 'Structured Node.js servers', icon: 'nestjs' },
+      { name: 'Express.js', details: 'Minimal Node.js APIs', icon: 'express' },
+      { name: 'Java', details: 'Object-oriented backend language', icon: 'java' },
     ],
   },
   {
@@ -61,9 +58,8 @@ export const stackCategories: StackCategory[] = [
     badge: 'Syntax & Logic',
     tone: 'amber',
     items: [
-      { name: 'TypeScript', details: 'Generics, Enums, Strict Typing', abbreviation: 'TS', tone: 'blue' },
-      { name: 'JavaScript', details: 'ES6+, Asynchronous (Async/Await)', abbreviation: 'JS', tone: 'yellow' },
-      { name: 'SQL / DDL', details: 'Queries, Joins, Indexing Basics', abbreviation: 'SQL', tone: 'purple' },
+      { name: 'JavaScript', details: 'The language of the web', icon: 'javascript' },
+      { name: 'TypeScript', details: 'JavaScript with types', icon: 'typescript' },
     ],
   },
   {
@@ -72,20 +68,21 @@ export const stackCategories: StackCategory[] = [
     badge: 'Persistence',
     tone: 'emerald',
     items: [
-      { name: 'PostgreSQL', details: 'Relational Modeling, Prisma/TypeORM', abbreviation: 'PG', tone: 'sky' },
-      { name: 'Supabase', details: 'Auth, Row-Level Security, Storage', abbreviation: 'SUP', tone: 'emerald' },
-      { name: 'MySQL & MariaDB', details: 'Relational storage & migrations', abbreviation: 'SQL', tone: 'orange' },
+      { name: 'MariaDB', details: 'Relational database', icon: 'mariadb' },
+      { name: 'MySQL', details: 'Relational database', icon: 'mysql' },
+      { name: 'PostgreSQL', details: 'Relational database', icon: 'postgresql' },
+      { name: 'Supabase', details: 'Postgres backend platform', icon: 'supabase' },
     ],
   },
   {
     id: 'tools',
     title: 'Design & Tools',
-    badge: 'UI & Prototyping',
+    badge: 'Design & Workflow',
     tone: 'purple',
     items: [
-      { name: 'Figma', details: 'UI/UX, Prototypes, Design Systems', abbreviation: 'FIG', tone: 'slate', logo: 'figma' },
-      { name: 'Git & GitHub Actions', details: 'CI/CD, Version Control, Code Reviews', abbreviation: 'GIT', tone: 'indigo' },
-      { name: 'Tailwind CSS', details: 'Responsive Grids, Dark Modes, Tokens', abbreviation: 'TW', tone: 'teal' },
+      { name: 'Figma', details: 'UI/UX design & prototyping', icon: 'figma' },
+      { name: 'Git', details: 'Version control', icon: 'git' },
+      { name: 'GitHub', details: 'Code hosting & collaboration', icon: 'github' },
     ],
   },
 ]

@@ -1,5 +1,5 @@
-import { navItems, site } from '../../data/site'
-import { Icon } from '../ui/Icon'
+import { ArrowUp } from 'lucide-react'
+import { navItems, site } from '@/data/site'
 import { LogoMark } from './Logo'
 
 export function Footer() {
@@ -10,7 +10,7 @@ export function Footer() {
       <div data-reveal="" className="mx-auto flex max-w-header flex-col items-center gap-6 px-5 py-10 text-center lg:flex-row lg:justify-between lg:py-8 lg:text-left">
         <p className="flex items-center gap-3 font-display text-sm text-fg-muted">
           <LogoMark className="size-7 rounded-md text-xs" />
-          © {year} {site.name}. Built with TypeScript & Tailwind CSS.
+          © {year} {site.name}. Built with Next.js & Tailwind CSS.
         </p>
 
         <nav aria-label="Footer">
@@ -32,7 +32,7 @@ export function Footer() {
 
         <a href="#home" className="flex items-center gap-2 font-mono text-xs text-fg-muted transition-colors hover:text-fg">
           Back to Top
-          <Icon name="arrow-up" className="size-3.5" />
+          <ArrowUp className="size-3.5" aria-hidden="true" />
         </a>
       </div>
     </footer>

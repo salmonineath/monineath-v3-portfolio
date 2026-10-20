@@ -6,13 +6,13 @@ describe('ContactForm', () => {
   const html = renderToStaticMarkup(<ContactForm />)
 
   it('associates every label with its control', () => {
-    for (const id of ['name', 'email', 'projectType', 'message']) {
+    for (const id of ['name', 'email', 'message']) {
       expect(html).toContain(`for="${id}"`)
       expect(html).toContain(`id="${id}"`)
     }
   })
 
-  it('renders the message as a textarea and email as an email input', () => {
+  it('renders project details as a textarea and email as an email input', () => {
     expect(html).toMatch(/<textarea[^>]*id="message"/)
     expect(html).toMatch(/<input type="email"[^>]*id="email"/)
   })
