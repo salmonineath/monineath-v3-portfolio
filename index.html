@@ -1,10 +1,31 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-theme="dark">
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>my-personal-portfolio</title>
+    <meta
+      name="description"
+      content="Monineath — full-stack developer and freelance engineer building production-ready web apps with TypeScript, React, Vue, and NestJS."
+    />
+    <title>Monineath — Full-Stack Developer & Freelance Engineer</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap"
+    />
+
+    <!-- Apply the saved theme before first paint to avoid a flash. Keep the key in sync with src/hooks/useTheme.ts. -->
+    <script>
+      try {
+        var savedTheme = localStorage.getItem('theme');
+        if (savedTheme === 'light' || savedTheme === 'dark') {
+          document.documentElement.dataset.theme = savedTheme;
+        }
+      } catch (error) {}
+    </script>
   </head>
   <body>
     <div id="root"></div>

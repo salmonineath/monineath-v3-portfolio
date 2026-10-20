@@ -1,75 +1,29 @@
-# React + TypeScript + Vite
+# monineath.dev — Personal Portfolio
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Single-page portfolio built with React 19, TypeScript, Vite, and Tailwind CSS v4.
 
-Currently, two official plugins are available:
+## Commands
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+| Task | Command |
+|---|---|
+| Install | `npm install` |
+| Dev server | `npm run dev` |
+| Production build (type-checks first) | `npm run build` |
+| Lint | `npm run lint` |
+| Unit tests | `npm test` |
 
-## React Compiler
+## Where things live
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- `src/styles/globals.css` — the design system: theme colors (dark + light), fonts, layout tokens. Components use the semantic tokens (`bg-page`, `text-fg-muted`, `border-line`, …), never raw hex values.
+- `src/lib/tones.ts` — accent hues for cards, badges, and icons.
+- `src/data/` — all editable content: `site.ts` (name, email, social links, nav), `stack.ts`, `services.ts`, `projects.ts`.
+- `src/components/ui/` — shared primitives (buttons, cards, tags, headings, icons).
+- `src/components/layout/` — header, footer, theme toggle.
+- `src/components/sections/` — one file per page section, in page order in `App.tsx`.
+- `src/components/projects/` — project card and its illustrative previews.
 
-## Expanding the ESLint configuration
+## Notes
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-
-```
-
-You can also install [eslint-plugin-react-x](https://npmx.dev/package/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://npmx.dev/package/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-
-```
+- **Contact form:** there is no backend. The form validates input, then opens the visitor's email app with the message drafted (`mailto:`). To collect submissions server-side, replace `buildInquiryMailto` in `src/lib/contactForm.ts` with a request to a form service.
+- **Fonts:** Fira Code (primary/body) and Plus Jakarta Sans (headings and buttons) load from Google Fonts in `index.html`.
+- **Theme:** dark by default; the toggle stores the choice in `localStorage`.
